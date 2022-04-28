@@ -1,16 +1,32 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
+@font-face {
+  src: url("/fonts/blogger_sans.otf");
+  font-family: blogger;
 }
 
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+}
+
+body {
+  background-color: #2f3136;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: blogger;
+}
+
+button {
+  padding: 5px;
+  background-color: #677bc4;
+  border: none;
+  outline: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.subtitle {
+  color: #b9bbbe;
 }
