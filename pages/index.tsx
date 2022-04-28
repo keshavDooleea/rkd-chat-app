@@ -2,8 +2,9 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
+import { useChatAuth } from "../classes/hooks/use-chat-auth.hook";
 import { IChatAuthResponse, IHTTPResponse } from "../classes/interfaces/http.interface";
-import { GET, POST } from "../classes/services/http.service";
+import { POST } from "../classes/services/http.service";
 import { LocalStorageService } from "../classes/services/local-storage.service";
 import styles from "../styles/Home.module.css";
 
@@ -11,31 +12,22 @@ const Home: NextPage = () => {
   const localStorageService = LocalStorageService.getInstance();
   const [authPassword, setAuthPassword] = useState<string>();
   const [error, setError] = useState<string | null>();
-  const [shouldRenderApp, setShouldRenderApp] = useState<boolean>(false);
   const router = useRouter();
+  const [shouldRenderApp, setShouldRenderApp] = useState<boolean>(false);
 
-  useEffect(() => {
-    autoLogIn(localStorageService.getChatToken());
-  }, []);
+  const checkPasswordResponseCallback = (response: IHTTPResponse<boolean>) => {
+    if (response.data) {
+      navigateToChat();
+    } else {
+      setShouldRenderApp(true);
+      localStorageService.deleteChatToken();
+    }
+  };
 
+  const [getAuthError] = useChatAuth(checkPasswordResponseCallback, setShouldRenderApp);
   const navigateToChat = () => router.push("chat");
 
-  const autoLogIn = (chatToken: string | null) => {
-    if (!chatToken) return;
-
-    GET<any>(`chat/token/${chatToken}`)
-      .then((response: IHTTPResponse<boolean>) => {
-        if (response.status === 400) return setError(response.res.statusText);
-
-        if (response.data) {
-          navigateToChat();
-        } else {
-          setShouldRenderApp(true);
-          localStorageService.deleteChatToken();
-        }
-      })
-      .catch(() => setError("HTTP GET: invalid token"));
-  };
+  useEffect(() => setError(getAuthError as string), [getAuthError]);
 
   const checkPassword = async () => {
     await POST<any, IChatAuthResponse>("chat/auth", { password: authPassword })
