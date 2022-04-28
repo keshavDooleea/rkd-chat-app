@@ -4,11 +4,13 @@ import { useChatAuth } from "../classes/hooks/use-chat-auth.hook";
 import { useSocket } from "../classes/hooks/use-socket";
 import { IHTTPResponse } from "../classes/interfaces/http.interface";
 import { CHAT_SOCKET_NAMESPACE } from "../classes/utils/config";
+import { ChatSidebar } from "../components/chat-sidebar";
+import chatStyles from "../styles/Chat.module.css";
 
 export default function ChatPage() {
-  const validateChatAuthToken = (response: IHTTPResponse<boolean>) => {
-    const router = useRouter();
+  const router = useRouter();
 
+  const validateChatAuthToken = (response: IHTTPResponse<boolean>) => {
     if (!response.data) {
       router.push("/");
     } else {
@@ -20,5 +22,14 @@ export default function ChatPage() {
   const [getAuthError] = useChatAuth(validateChatAuthToken, setShouldRenderApp);
   const [chatSocket] = useSocket(CHAT_SOCKET_NAMESPACE);
 
-  return <>{shouldRenderApp && <div>CHATTT</div>}</>;
+  return (
+    <>
+      {shouldRenderApp && (
+        <div className={chatStyles.chatHomePage}>
+          <ChatSidebar />
+          <main></main>
+        </div>
+      )}
+    </>
+  );
 }

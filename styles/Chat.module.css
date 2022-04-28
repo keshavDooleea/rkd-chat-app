@@ -1,0 +1,35 @@
+.chatHomePage {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.chatHomePage aside {
+  width: 300px;
+  height: 100vh;
+  background-color: #36393f;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.chatHomePage .asideHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.chatHomePage .asideHeader label {
+  margin: 0 5px;
+}
+
+.chatHomePage .asideHeader input:checked ~ label {
+  color: white;
+}
+
+.chatHomePage main {
+  flex: 1;
+  height: 100vh;
+}
