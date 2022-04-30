@@ -25,8 +25,18 @@ button {
   color: white;
   border-radius: 5px;
   cursor: pointer;
+  font-family: blogger;
 }
 
 .subtitle {
   color: #b9bbbe;
+}
+
+.title {
+  color: #fff;
+}
+
+.flex-row {
+  display: flex;
+  align-items: center;
 }

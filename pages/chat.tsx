@@ -4,6 +4,7 @@ import { useChatAuth } from "../classes/hooks/use-chat-auth.hook";
 import { useSocket } from "../classes/hooks/use-socket";
 import { IHTTPResponse } from "../classes/interfaces/http.interface";
 import { CHAT_SOCKET_NAMESPACE } from "../classes/utils/config";
+import { ChatMessageContainer } from "../components/chat-message-container";
 import { ChatSidebar } from "../components/chat-sidebar";
 import chatStyles from "../styles/Chat.module.css";
 
@@ -19,15 +20,17 @@ export default function ChatPage() {
   };
 
   const [shouldRenderApp, setShouldRenderApp] = useState<boolean>(false);
-  const [getAuthError] = useChatAuth(validateChatAuthToken, setShouldRenderApp);
+  const [_] = useChatAuth(validateChatAuthToken, setShouldRenderApp);
   const [chatSocket] = useSocket(CHAT_SOCKET_NAMESPACE);
+  const [roomsId, setRoomsId] = useState<string[]>([]);
+  const [selectedRoom, setSelectedRoom] = useState<string>("");
 
   return (
     <>
       {shouldRenderApp && (
         <div className={chatStyles.chatHomePage}>
-          <ChatSidebar />
-          <main></main>
+          <ChatSidebar chatSocket={chatSocket} roomsId={roomsId} setRoomsId={setRoomsId} setSelectedRoom={setSelectedRoom} />
+          {selectedRoom && <ChatMessageContainer chatSocket={chatSocket} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom} />}
         </div>
       )}
     </>
