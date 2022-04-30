@@ -1,11 +1,15 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { ChatMessage, IChatMessage } from "../classes/chat-message";
 import { IChatMessageContainer } from "../classes/interfaces/props";
 import chatStyles from "../styles/Chat.module.css";
 
-export const ChatMessageContainer = ({ chatSocket, selectedRoom, setSelectedRoom }: IChatMessageContainer) => {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+export const ChatMessageContainer = ({ chatSocket, selectedRoom, setSelectedRoom, messages, setMessages }: IChatMessageContainer) => {
   const [inputMessage, setInputMessage] = useState<string>("");
+  const scrollToBottomRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    scrollToBottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     setMessages([]);
@@ -14,7 +18,15 @@ export const ChatMessageContainer = ({ chatSocket, selectedRoom, setSelectedRoom
     });
   }, [selectedRoom]);
 
-  const sendNewMessage = () => {};
+  useEffect(scrollToBottom, [messages, setMessages]);
+
+  const sendNewMessage = (event: FormEvent) => {
+    event.preventDefault();
+    if (!inputMessage) return;
+
+    // console.log(selectedRoom, inputMessage);
+    // chatSocket?.emit("");
+  };
 
   return (
     <main className={chatStyles.chatMessageContainer}>
@@ -35,6 +47,7 @@ export const ChatMessageContainer = ({ chatSocket, selectedRoom, setSelectedRoom
             <p className="title">{message.getMessage()}</p>
           </div>
         ))}
+        <div ref={scrollToBottomRef}></div>
       </div>
       <form className={chatStyles.chatForm} autoComplete="off">
         <input type="text" id={chatStyles.chatMsgInput} placeholder="Chat" value={inputMessage} onChange={(e) => setInputMessage(e.target.value)} />

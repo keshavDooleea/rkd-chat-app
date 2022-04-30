@@ -26,7 +26,9 @@ export const useSocket = (namespace: string) => {
     };
   }, [setSocket]);
 
-  const addListeners = (newSocket: Socket) => {};
+  const addListeners = (newSocket: Socket) => {
+    newSocket.emit("RKDjoinAllRooms");
+  };
 
   const removeListeners = (newSocket: Socket) => {};
 

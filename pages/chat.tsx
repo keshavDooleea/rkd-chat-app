@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ChatMessage, IChatMessage } from "../classes/chat-message";
 import { useChatAuth } from "../classes/hooks/use-chat-auth.hook";
 import { useSocket } from "../classes/hooks/use-socket";
 import { IHTTPResponse } from "../classes/interfaces/http.interface";
@@ -24,13 +25,24 @@ export default function ChatPage() {
   const [chatSocket] = useSocket(CHAT_SOCKET_NAMESPACE);
   const [roomsId, setRoomsId] = useState<string[]>([]);
   const [selectedRoom, setSelectedRoom] = useState<string>("");
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+
+  useEffect(() => {
+    chatSocket?.on("savedMessage", (message: IChatMessage) => {
+      setMessages((previousMsges) => [...previousMsges, new ChatMessage(message)]);
+    });
+
+    return () => {
+      chatSocket?.off("savedMessage");
+    };
+  }, [chatSocket]);
 
   return (
     <>
       {shouldRenderApp && (
         <div className={chatStyles.chatHomePage}>
           <ChatSidebar chatSocket={chatSocket} roomsId={roomsId} setRoomsId={setRoomsId} setSelectedRoom={setSelectedRoom} />
-          {selectedRoom && <ChatMessageContainer chatSocket={chatSocket} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom} />}
+          {selectedRoom && <ChatMessageContainer chatSocket={chatSocket} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom} messages={messages} setMessages={setMessages} />}
         </div>
       )}
     </>
