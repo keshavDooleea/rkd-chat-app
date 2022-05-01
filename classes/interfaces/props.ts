@@ -8,6 +8,7 @@ export interface IChatSocket {
 
 export interface IChatSidebar extends IChatSocket {
   roomsId: string[];
+  selectedRoom: string;
   setRoomsId: Dispatch<SetStateAction<string[]>>;
   setSelectedRoom: Dispatch<SetStateAction<string>>;
 }

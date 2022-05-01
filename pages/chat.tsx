@@ -41,7 +41,7 @@ export default function ChatPage() {
     <>
       {shouldRenderApp && (
         <div className={chatStyles.chatHomePage}>
-          <ChatSidebar chatSocket={chatSocket} roomsId={roomsId} setRoomsId={setRoomsId} setSelectedRoom={setSelectedRoom} />
+          <ChatSidebar chatSocket={chatSocket} roomsId={roomsId} setRoomsId={setRoomsId} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom} />
           {selectedRoom && <ChatMessageContainer chatSocket={chatSocket} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom} messages={messages} setMessages={setMessages} />}
         </div>
       )}

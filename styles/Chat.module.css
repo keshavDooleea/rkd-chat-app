@@ -41,6 +41,11 @@
   cursor: pointer;
 }
 
+.chatHomePage aside .asideMain .selectedRoom {
+  background-color: white;
+  color: #000;
+}
+
 .chatHomePage aside .asideMain .room:hover {
   filter: brightness(90%);
 }
@@ -104,9 +109,22 @@
   padding: 0 5px;
   border-radius: 5px;
   max-width: 80%;
+  margin-right: 5px;
 }
 
 .msgRow.RKD {
+  align-self: flex-end;
+  background-color: white;
+  color: #2f3136;
+}
+
+.msgRow.RKD small {
+  color: #2f3136;
+}
+
+.msgRow.RKD p {
+  color: #000;
+  font-weight: bold;
 }
 
 .msgRow.user {

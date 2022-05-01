@@ -14,7 +14,7 @@ const RoomRadioInput = (value: RoomRadioInputType, checkByDefault = false) => {
   );
 };
 
-export const ChatSidebar = ({ chatSocket, roomsId, setRoomsId, setSelectedRoom }: IChatSidebar) => {
+export const ChatSidebar = ({ chatSocket, roomsId, setRoomsId, selectedRoom, setSelectedRoom }: IChatSidebar) => {
   const socketService = SocketService.getInstance();
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export const ChatSidebar = ({ chatSocket, roomsId, setRoomsId, setSelectedRoom }
 
       <div className={chatStyles.asideMain}>
         {roomsId.map((room) => (
-          <div className={chatStyles.room} key={room} onClick={() => setSelectedRoom(room)}>
+          <div className={`${chatStyles.room} ${selectedRoom === room ? chatStyles.selectedRoom : ""}`} key={room} onClick={() => setSelectedRoom(room)}>
             {room}
           </div>
         ))}

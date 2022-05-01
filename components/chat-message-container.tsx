@@ -24,8 +24,8 @@ export const ChatMessageContainer = ({ chatSocket, selectedRoom, setSelectedRoom
     event.preventDefault();
     if (!inputMessage) return;
 
-    // console.log(selectedRoom, inputMessage);
-    // chatSocket?.emit("");
+    chatSocket?.emit("newRKDMessage", { data: inputMessage, room: selectedRoom });
+    setInputMessage("");
   };
 
   return (
