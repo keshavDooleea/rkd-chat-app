@@ -11,6 +11,7 @@ export interface IChatSidebar extends IChatSocket {
   selectedRoom: string;
   setRoomsId: Dispatch<SetStateAction<string[]>>;
   setSelectedRoom: Dispatch<SetStateAction<string>>;
+  unreadMsgMap: Map<string, number>;
 }
 
 export interface IChatMessageContainer extends IChatSocket {

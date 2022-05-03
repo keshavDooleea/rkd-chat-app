@@ -31,7 +31,7 @@
   overflow-y: auto;
 }
 
-.chatHomePage aside .asideMain .room {
+.chatHomePage aside .room {
   margin: 10px 0;
   padding: 6px 0;
   border-radius: 5px;
@@ -41,13 +41,27 @@
   cursor: pointer;
 }
 
+.chatHomePage aside .roomWithsNb {
+  padding: 5px;
+}
+
 .chatHomePage aside .asideMain .selectedRoom {
   background-color: white;
   color: #000;
 }
 
-.chatHomePage aside .asideMain .room:hover {
+.chatHomePage aside .room:hover {
   filter: brightness(90%);
+}
+
+.chatHomePage aside .asideUnreadContainer {
+  height: 200px;
+}
+
+.chatHomePage aside .unreadMainContainer {
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 5px;
 }
 
 .chatHomePage main {
@@ -56,7 +70,8 @@
 }
 
 .chatHomePage aside,
-.chatHomePage main {
+.chatHomePage main,
+.chatHomePage aside .asideUnreadContainer {
   background-color: #36393f;
   border: 1px solid black;
   border-radius: 5px;

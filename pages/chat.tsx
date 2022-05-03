@@ -26,22 +26,40 @@ export default function ChatPage() {
   const [roomsId, setRoomsId] = useState<string[]>([]);
   const [selectedRoom, setSelectedRoom] = useState<string>("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [unreadMsgMap, setUnreadMsgMap] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
     chatSocket?.on("savedMessage", (message: IChatMessage) => {
-      setMessages((previousMsges) => [...previousMsges, new ChatMessage(message)]);
+      if (message.userId === selectedRoom) {
+        setMessages((previousMsges) => [...previousMsges, new ChatMessage(message)]);
+      } else {
+        const count = unreadMsgMap.get(message.userId);
+        const newCount = count ? count + 1 : 1;
+
+        const entries = unreadMsgMap;
+        entries.set(message.userId, newCount);
+
+        setUnreadMsgMap(new Map(entries));
+      }
     });
 
     return () => {
       chatSocket?.off("savedMessage");
     };
-  }, [chatSocket]);
+  }, [chatSocket, selectedRoom]);
+
+  useEffect(() => {
+    // remove room from unread messages
+    const entries = unreadMsgMap;
+    entries.delete(selectedRoom);
+    setUnreadMsgMap(new Map(entries));
+  }, [selectedRoom, setSelectedRoom]);
 
   return (
     <>
       {shouldRenderApp && (
         <div className={chatStyles.chatHomePage}>
-          <ChatSidebar chatSocket={chatSocket} roomsId={roomsId} setRoomsId={setRoomsId} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom} />
+          <ChatSidebar chatSocket={chatSocket} roomsId={roomsId} setRoomsId={setRoomsId} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom} unreadMsgMap={unreadMsgMap} />
           {selectedRoom && <ChatMessageContainer chatSocket={chatSocket} selectedRoom={selectedRoom} setSelectedRoom={setSelectedRoom} messages={messages} setMessages={setMessages} />}
         </div>
       )}

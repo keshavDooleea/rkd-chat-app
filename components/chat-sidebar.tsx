@@ -14,7 +14,7 @@ const RoomRadioInput = (value: RoomRadioInputType, checkByDefault = false) => {
   );
 };
 
-export const ChatSidebar = ({ chatSocket, roomsId, setRoomsId, selectedRoom, setSelectedRoom }: IChatSidebar) => {
+export const ChatSidebar = ({ chatSocket, roomsId, setRoomsId, selectedRoom, setSelectedRoom, unreadMsgMap }: IChatSidebar) => {
   const socketService = SocketService.getInstance();
 
   useEffect(() => {
@@ -43,6 +43,21 @@ export const ChatSidebar = ({ chatSocket, roomsId, setRoomsId, selectedRoom, set
             {room}
           </div>
         ))}
+      </div>
+
+      <div className={chatStyles.asideUnreadContainer}>
+        <div className={`subtitle row-between`}>
+          <small>Unread Messages</small>
+          <small>{unreadMsgMap.size}</small>
+        </div>
+        <div className={chatStyles.unreadMainContainer}>
+          {Array.from(unreadMsgMap.entries()).map((room) => (
+            <div className={`${chatStyles.room} ${chatStyles.roomWithsNb} row-between`} key={room[0]} onClick={() => setSelectedRoom(room[0])}>
+              <div>{room[0]}</div>
+              <span>{room[1]}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </aside>
   );

@@ -40,3 +40,9 @@ button {
   display: flex;
   align-items: center;
 }
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
