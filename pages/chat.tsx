@@ -70,6 +70,7 @@ export default function ChatPage() {
     const entries = unreadMsgMap;
     entries.delete(selectedRoom);
     setUnreadMsgMap(new Map(entries));
+    chatSocket?.emit("clearUnreadMessages", { userId: selectedRoom });
   }, [selectedRoom, setSelectedRoom]);
 
   return (
