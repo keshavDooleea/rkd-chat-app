@@ -28,7 +28,6 @@ export default function ChatPage() {
     entries.set(userId, newCount);
 
     setUnreadMsgMap(new Map(entries));
-    return newCount;
   };
 
   const [shouldRenderApp, setShouldRenderApp] = useState<boolean>(false);
@@ -44,8 +43,8 @@ export default function ChatPage() {
       if (message.userId === selectedRoom) {
         setMessages((previousMsges) => [...previousMsges, new ChatMessage(message)]);
       } else {
-        const unreadCount = updateUnreadMessages(message.userId);
-        chatSocket.emit("saveUnreadMessage", { userId: message.userId, unreadCount });
+        updateUnreadMessages(message.userId);
+        chatSocket.emit("saveUnreadMessage", { userId: message.userId });
       }
     });
 
