@@ -1,5 +1,10 @@
 export type ChatAuthor = "RKD" | "User";
 
+export interface IUnreadChat {
+  userId: string;
+  unreadCount: number;
+}
+
 export interface IChatMessage {
   _id: string;
   userId: string;

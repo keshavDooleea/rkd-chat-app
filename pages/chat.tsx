@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { ChatMessage, IChatMessage } from "../classes/chat-message";
+import { ChatMessage, IChatMessage, IUnreadChat } from "../classes/chat-message";
 import { useChatAuth } from "../classes/hooks/use-chat-auth.hook";
 import { useSocket } from "../classes/hooks/use-socket";
 import { IHTTPResponse } from "../classes/interfaces/http.interface";
@@ -20,6 +20,17 @@ export default function ChatPage() {
     }
   };
 
+  const updateUnreadMessages = (userId: string) => {
+    const count = unreadMsgMap.get(userId);
+    const newCount = count ? count + 1 : 1;
+
+    const entries = unreadMsgMap;
+    entries.set(userId, newCount);
+
+    setUnreadMsgMap(new Map(entries));
+    return newCount;
+  };
+
   const [shouldRenderApp, setShouldRenderApp] = useState<boolean>(false);
   const [_] = useChatAuth(validateChatAuthToken, setShouldRenderApp);
   const [chatSocket] = useSocket(CHAT_SOCKET_NAMESPACE);
@@ -33,13 +44,8 @@ export default function ChatPage() {
       if (message.userId === selectedRoom) {
         setMessages((previousMsges) => [...previousMsges, new ChatMessage(message)]);
       } else {
-        const count = unreadMsgMap.get(message.userId);
-        const newCount = count ? count + 1 : 1;
-
-        const entries = unreadMsgMap;
-        entries.set(message.userId, newCount);
-
-        setUnreadMsgMap(new Map(entries));
+        const unreadCount = updateUnreadMessages(message.userId);
+        chatSocket.emit("saveUnreadMessage", { userId: message.userId, unreadCount });
       }
     });
 
@@ -47,6 +53,17 @@ export default function ChatPage() {
       chatSocket?.off("savedMessage");
     };
   }, [chatSocket, selectedRoom]);
+
+  // get unread/missed messages
+  useEffect(() => {
+    chatSocket?.emit("getUnreadMessages", (unreadMessages: IUnreadChat[]) => {
+      const entries = unreadMsgMap;
+      unreadMessages.forEach((messageItem) => {
+        entries.set(messageItem.userId, messageItem.unreadCount);
+      });
+      setUnreadMsgMap(new Map(entries));
+    });
+  }, [chatSocket]);
 
   useEffect(() => {
     // remove room from unread messages
