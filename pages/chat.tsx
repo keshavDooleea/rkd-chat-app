@@ -48,8 +48,14 @@ export default function ChatPage() {
       }
     });
 
+    chatSocket?.on("updatedConnectedRooms", (rooms: string[]) => {
+      setRoomsId(rooms);
+      chatSocket.emit("RKDjoinAllRooms");
+    });
+
     return () => {
       chatSocket?.off("savedMessage");
+      chatSocket?.off("updatedConnectedRooms");
     };
   }, [chatSocket, selectedRoom]);
 
