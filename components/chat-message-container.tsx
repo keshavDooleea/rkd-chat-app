@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { ChatMessage, IChatMessage } from "../classes/chat-message";
+import { ChatMessage, IChatMessage, IOfflineMessage } from "../classes/chat-message";
 import { IChatMessageContainer } from "../classes/interfaces/props";
 import chatStyles from "../styles/Chat.module.css";
 
@@ -24,7 +24,11 @@ export const ChatMessageContainer = ({ chatSocket, selectedRoom, setSelectedRoom
     event.preventDefault();
     if (!inputMessage) return;
 
-    chatSocket?.emit("newRKDMessage", { data: inputMessage, room: selectedRoom });
+    chatSocket?.emit("newRKDMessage", { data: inputMessage, room: selectedRoom }, (offlineMessage: IOfflineMessage) => {
+      if (!offlineMessage.isOnline) {
+        setMessages((previousMsges) => [...previousMsges, new ChatMessage(offlineMessage.message)]);
+      }
+    });
     setInputMessage("");
   };
 

@@ -5,6 +5,11 @@ export interface IUnreadChat {
   unreadCount: number;
 }
 
+export interface IOfflineMessage {
+  isOnline: boolean;
+  message: IChatMessage;
+}
+
 export interface IChatMessage {
   _id: string;
   userId: string;
