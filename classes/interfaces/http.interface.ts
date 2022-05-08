@@ -7,3 +7,7 @@ export interface IHTTPResponse<T> {
 export interface IChatAuthResponse {
   chatToken: string;
 }
+
+export interface IAuthResponse {
+  isValid: boolean;
+}

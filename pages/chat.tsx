@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ChatMessage, IChatMessage, IUnreadChat } from "../classes/chat-message";
 import { useChatAuth } from "../classes/hooks/use-chat-auth.hook";
 import { useSocket } from "../classes/hooks/use-socket";
-import { IHTTPResponse } from "../classes/interfaces/http.interface";
+import { IAuthResponse, IHTTPResponse } from "../classes/interfaces/http.interface";
 import { CHAT_SOCKET_NAMESPACE } from "../classes/utils/config";
 import { ChatMessageContainer } from "../components/chat-message-container";
 import { ChatSidebar } from "../components/chat-sidebar";
@@ -12,8 +12,8 @@ import chatStyles from "../styles/Chat.module.css";
 export default function ChatPage() {
   const router = useRouter();
 
-  const validateChatAuthToken = (response: IHTTPResponse<boolean>) => {
-    if (!response.data) {
+  const validateChatAuthToken = (response: IHTTPResponse<IAuthResponse>) => {
+    if (!response.data || !response.data.isValid) {
       router.push("/");
     } else {
       setShouldRenderApp(true);

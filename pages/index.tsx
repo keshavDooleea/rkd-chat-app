@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
 import { useChatAuth } from "../classes/hooks/use-chat-auth.hook";
-import { IChatAuthResponse, IHTTPResponse } from "../classes/interfaces/http.interface";
+import { IAuthResponse, IChatAuthResponse, IHTTPResponse } from "../classes/interfaces/http.interface";
 import { POST } from "../classes/services/http.service";
 import { LocalStorageService } from "../classes/services/local-storage.service";
 import styles from "../styles/Home.module.css";
@@ -15,8 +15,8 @@ const Home: NextPage = () => {
   const router = useRouter();
   const [shouldRenderApp, setShouldRenderApp] = useState<boolean>(false);
 
-  const checkPasswordResponseCallback = (response: IHTTPResponse<boolean>) => {
-    if (response.data) {
+  const checkPasswordResponseCallback = (response: IHTTPResponse<IAuthResponse>) => {
+    if (response.data && response.data.isValid) {
       navigateToChat();
     } else {
       setShouldRenderApp(true);
