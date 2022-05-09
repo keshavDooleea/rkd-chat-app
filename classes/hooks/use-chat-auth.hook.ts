@@ -12,6 +12,8 @@ export const useChatAuth = <T>(cb: (res: IHTTPResponse<T>) => void, setShouldRen
   }, []);
 
   const validateAuth = (chatToken: string | null) => {
+    if (!chatToken) return setError("HTTP GET: inexistant token");
+
     GET<any>(`chat/token/${chatToken}`)
       .then((response: IHTTPResponse<T>) => {
         if (response.status === 400) return setError(response.res.statusText);
